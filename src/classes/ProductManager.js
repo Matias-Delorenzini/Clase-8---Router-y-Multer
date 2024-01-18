@@ -58,8 +58,19 @@ class ProductManager {
                 return { status: 400, message: 'Los datos del producto no son un objeto.' };
             }
             // Destructuring de los datos del body
-            const { title, description, code, price, stock, category, thumbnails } = productData;
-            let status = true; // (Por defecto)
+            const { 
+                title,
+                description,
+                code,
+                price,
+                stock,
+                category, 
+                thumbnails,
+                status
+            } = productData;
+            if (status == undefined){
+                productData.status = true;
+            }
             
             // Si title, description, code, price, stock o category no están, lo avisamos (Thumbnail no es necesario)
             if (!title || !description || !code || !price || !stock || !category) {
@@ -94,7 +105,7 @@ class ProductManager {
             // Añadimos 1 al id
             ProductManager.id++;
             // Creamos un nuevo producto, lo subimos a this.products y lo mandamos al archivo
-            let newProduct = { id: ProductManager.id, ...productData, status};            
+            let newProduct = { id: ProductManager.id, ...productData};            
             products.push(newProduct);
             await fsPromises.writeFile(this.path, JSON.stringify(products), 'utf-8');
             return { status: 201, message: `Producto añadido exitosamente con ID: ${ProductManager.id}` };
