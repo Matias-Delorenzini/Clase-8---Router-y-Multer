@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
         if (limit && !isNaN(parseInt(limit))) {
             return res.status(200).send(products.data.slice(0, parseInt(limit)));
         }
-        return res.status(200).send(products);
+        return res.status(200).send(products.data);
     } catch (error) {
         res.status(500).json({ error: 'Error al obtener los productos: ' + error.message });
     }
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 router.get('/:pid', async (req, res) =>{
     const productId = req.params.pid;
     const product = await productManager.getProductById(productId);
-    res.status(200).send(product);
+    res.status(200).send(product.data);
 });
 
 // Endpoint que añade un producto
