@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         const { limit } = req.query;
         const products = await productManager.getProducts();
         if (limit && !isNaN(parseInt(limit))) {
-            return res.status(200).send(products.slice(0, parseInt(limit)));
+            return res.status(200).send(products.data.slice(0, parseInt(limit)));
         }
         return res.status(200).send(products);
     } catch (error) {
