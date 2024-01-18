@@ -68,7 +68,7 @@ class ProductManager {
                 thumbnails,
                 status
             } = productData;
-            if (status == undefined){
+            if (status !== false){
                 productData.status = true;
             }
             
