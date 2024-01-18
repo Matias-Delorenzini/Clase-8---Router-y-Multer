@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
 router.get('/:cid', async (req, res) => {
     const cartId = req.params.cid;
     const cart = await cartManager.getCartById(cartId);
-    res.status(200).send(cart);
+    res.status(200).send(cart.data);
 });
 
 // Endpoint que añade un producto a un cart

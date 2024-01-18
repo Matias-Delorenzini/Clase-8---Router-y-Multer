@@ -120,28 +120,6 @@ class ProductManager {
                 category,
                 thumbnails
             } = dataToUpdate;
-            
-            // Si status no es boolean pero tampoco es undefined, lo advertimos
-            if (typeof status !== 'boolean' && status !== undefined) {
-                return { status: 400, message: '"status" debe ser un booleano' };
-            }
-            // Si stock y precio no son numeros lo advertimos
-            if (isNaN(Number(stock)) || isNaN(Number(price))){
-                return { status: 400, message: "price y stock deben ser números" };
-            }
-            // Si los valores que tienen que ser string no lo son lo avisamos
-            if (typeof title !== 'string' || typeof description !== 'string' || typeof code !== 'string' || typeof category !== 'string') {
-                return { status: 400, message: "title, description, code y category deben ser strings" };
-            }            
-            if (thumbnails && !Array.isArray(thumbnails)) {
-                return { status: 400, message: '"thumbnails" debe ser un array de rutas de imágenes.' };
-            }
-            if (thumbnails) {
-                // Verificar que todos los elementos en thumbnails sean strings
-                if (!thumbnails.every(path => typeof path === 'string')) {
-                    return { status: 400, message: 'Todos los elementos en "thumbnails" deben ser strings.' };
-                }
-            }
 
             // Obtenemos los datos
             let content = await fsPromises.readFile(this.path, "utf-8");
@@ -163,6 +141,29 @@ class ProductManager {
             const updatedStatus = status !== undefined ? status : products[indexToUpdate].status;
             const updatedStock = stock !== undefined ? stock : products[indexToUpdate].stock;
             const updatedCategory = category !== undefined ? category : products[indexToUpdate].category;
+            const updatedThumbnails = thumbnails !== undefined ? thumbnails : products[indexToUpdate].updatedThumbnails;
+
+            // Si status no es boolean pero tampoco es undefined, lo advertimos
+            if (typeof updatedStatus !== 'boolean' && updatedStatus !== undefined) {
+                return { updatedStatus: 400, message: '"status" debe ser un booleano' };
+            }
+            // Si stock y precio no son numeros lo advertimos
+            if (isNaN(Number(updatedStock)) || isNaN(Number(updatedPrice))){
+                return { status: 400, message: "price y stock deben ser números" };
+            }
+            // Si los valores que tienen que ser string no lo son lo avisamos
+            if ((typeof updatedTitle !== 'string' || typeof updatedDescription !== 'string' || typeof updatedCode !== 'string' || typeof updatedCategory !== 'string') && (typeof (updatedTitle || updatedDescription || updatedCode || updatedCategory) !== "undefined")) {
+                return { status: 400, message: "title, description, code y category deben ser strings" };
+            }            
+            if (updatedThumbnails !== undefined && !Array.isArray(updatedThumbnails)) {
+                return { status: 400, message: '"thumbnails" debe ser un array de rutas de imágenes.' + thumbnails + updatedThumbnails };
+            }
+            if (updatedThumbnails) {
+                // Verificar que todos los elementos en thumbnails sean strings
+                if (!updatedThumbnails.every(path => typeof path === 'string')) {
+                    return { status: 400, message: 'Todos los elementos en "thumbnails" deben ser strings.' };
+                }
+            }
     
             // Hacemos un objeto con los datos actualizados
             let updatedData = {
